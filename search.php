@@ -1,7 +1,19 @@
 <?php
 
-$searchText=$_GET['text'];
 $id=$_GET['id'];
+echo $id;
+?>
+
+
+<?php
+
+if (isset($_GET['text'])) {
+    $searchText = $_GET['text'];
+}
+else{
+    $searchText=NULL;
+}
+//$id=$_GET['id'];
 
 //echo $searchText;
 
@@ -16,8 +28,14 @@ $connection=mysqli_connect($hostName,$userName,$password,$dbName);
 if (!$connection){
     die('Database Server Not Connected');
 }
+if (isset($_GET['id'])){
+    $sql="DELETE * FROM student WHERE student_id='$_GET[id]'";
+    mysqli_query($connection,$sql);
+}
+
 if ($searchText==NULL) {
     $sql = "SELECT * FROM  student ";
+
 }
 else{
     $sql = "SELECT * FROM  student WHERE student_name LIKE '%$searchText%' OR student_email LIKE '%$searchText%' ";
@@ -46,8 +64,8 @@ $result=mysqli_query($connection,$sql);
         <td><?php echo $row['student_email']?></td>
         <td><?php echo $row['student_number']?></td>
         <td>
-            <a onclick="ajax_delete(<?php echo $row['student_id'] ?>,'res')">Edit</a>
-            <a href="">Delete</a>
+            <a href=""> Edit</a>
+            <a href="#" onclick="ajax_delete(<?php echo $row['student_id'] ?>,'res')">Delete</a>
         </td>
     </tr>
     <?php } ?>
